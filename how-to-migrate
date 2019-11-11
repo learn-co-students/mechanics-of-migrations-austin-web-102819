@@ -1,0 +1,49 @@
+1. Create a directory called "db" at the top level (same level you execute your Ruby classes)
+2. Inside the db directory, create a migrate directory
+3. Inside Migrate, create a file called "01_create_OBJECTNAME.rb"
+4. In /db/migrate/01_create_OBJECTNAME.rb, add the following to make the class a subclass of Active Record:
+{code}
+    class CreateArtists < ActiveRecord::Migration[5.2]
+    def up
+    end
+    
+    def down
+    end
+
+    def change
+        create_table :artists do |t|
+        t.string :name
+        t.string :genre
+        t.integer :age
+        t.string :hometown
+        end
+    end
+    end
+{code}
+
+the #change method creates a table (artists) and sets each colummn name equal to a string (or integer) and column name. 
+Example: t.string :name"
+t= this specific element 
+string = data type for the column
+:name = column name
+
+5. Add the DB connection to environment.rb:
+{code}
+ActiveRecord::Base.establish_connection(
+  :adapter => "sqlite3",
+  :database => "db/artists.sqlite"
+)
+{code}
+6. Add the Active Record sublcass to your class method:
+{code}
+class Artist < ActiveRecord::Base
+end
+{code}
+6. Test using bundle exec rake console and then running:
+CLASSNAME.column_names (Artist.column_names)
+7. Instantiate a new object: 
+{code}
+    a= Artist.new(name: 'Jon')
+    a.age = 30
+    a.save
+{code}
